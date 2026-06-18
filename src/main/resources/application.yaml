@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: restaurant
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABSE_USER}
+    password: ${DATABSE_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
