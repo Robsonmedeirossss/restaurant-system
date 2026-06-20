@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tables (
+CREATE TABLE IF NOT EXISTS restaurant_tables (
   id BIGSERIAL PRIMARY KEY,
   number INTEGER NOT NULL UNIQUE,
   capacity INTEGER DEFAULT 4,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tables (
       'BUSY',
       'INACTIVE'
     )
-  ) DEFAULT 'FREE'
+  ) DEFAULT 'FREE',
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP
 );
@@ -49,10 +49,11 @@ CREATE TABLE IF NOT EXISTS orders(
       'CANCELED'
     )
   ) DEFAULT 'PENDING',
-  table_id BIGINT NOT NULL REFERENCES tables(id),
+  table_id BIGINT NOT NULL REFERENCES restaurant_tables(id),
   opening_date TIMESTAMP,
   closing_date TIMESTAMP,
-  observation VARCHAR(1000)
+  observation VARCHAR(1000),
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_orders_status ON orders(status);
@@ -63,9 +64,11 @@ CREATE TABLE IF NOT EXISTS products_orders(
   id BIGSERIAL PRIMARY KEY,
   product_id BIGINT REFERENCES products(id),
   order_id BIGINT REFERENCES orders(id),
-  unity_price NUMERIC(7,2) NOT NULL CHECK (price >= 0),
+  unity_price NUMERIC(7,2) NOT NULL CHECK (unity_price >= 0),
   quantity INTEGER NOT NULL CHECK (quantity > 0),
   observation VARCHAR(1000),
+  preparation_start_at TIMESTAMP,
+  preparation_end_at TIMESTAMP,
   status VARCHAR(50) NOT NULL CHECK(
     status IN (
       'PENDING',
@@ -82,9 +85,9 @@ CREATE INDEX idx_products_orders_order ON products_orders(order_id);
 CREATE INDEX idx_products_orders_status ON products_orders(status);
 CREATE INDEX idx_products_orders_product ON products_orders(product_id);
 
-CREATE TABLE IF NOT EXISTS billing(
+CREATE TABLE IF NOT EXISTS billings(
   id BIGSERIAL PRIMARY KEY,
-  order_id BIGINT FOREIGN KEY REFERENCES orders(id),
+  order_id BIGINT REFERENCES orders(id),
   subtotal NUMERIC(7,2) NOT NULL CHECK (subtotal >= 0),
   discount INTEGER,
   service_tax INTEGER,
@@ -93,7 +96,7 @@ CREATE TABLE IF NOT EXISTS billing(
   closed_at TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS PAYMENT(
+CREATE TABLE IF NOT EXISTS payments(
   id BIGINT PRIMARY KEY,
   order_id BIGINT NOT NULL REFERENCES orders(id),
   value NUMERIC(7, 2) NOT NULL CHECK(value >= 0),
@@ -113,8 +116,8 @@ CREATE TABLE IF NOT EXISTS PAYMENT(
     )) DEFAULT 'PENDING',
   external_transaction_code VARCHAR(100),
   payment_date TIMESTAMP,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_payment_status ON payment(status);
-CREATE INDEX idx_payment_order ON payment(order_id);
+CREATE INDEX idx_payment_status ON payments(status);
+CREATE INDEX idx_payment_order ON payments(order_id);

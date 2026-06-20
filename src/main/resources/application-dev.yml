@@ -2,9 +2,9 @@ spring:
   application:
     name: restaurant
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABSE_USER}
-    password: ${DATABSE_PASSWORD}
+    url: jdbc:postgresql://localhost:5444/restaurant
+    username: root
+    password: root
   jpa:
     show-sql: true
     hibernate:
