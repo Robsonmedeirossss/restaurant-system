@@ -7,6 +7,7 @@ import com.dev.restaurant.entities.Product;
 public class ProductMapper {
   public static ProductResponse toResponse(Product product) {
     return ProductResponse.builder()
+            .id(product.getId())
             .name(product.getName())
             .description(product.getDescription())
             .price(product.getPrice())

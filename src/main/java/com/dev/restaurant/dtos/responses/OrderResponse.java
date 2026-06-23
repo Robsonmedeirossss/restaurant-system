@@ -8,6 +8,7 @@ import lombok.Builder;
 
 @Builder
 public record OrderResponse(
+  Long id,
   StatusOrder status,
   Long tableId,
   LocalDateTime openingDate,

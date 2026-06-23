@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @Builder
 @Table(name = "categories_products")
-public class CategoriesProducts {
+public class CategoryProduct {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

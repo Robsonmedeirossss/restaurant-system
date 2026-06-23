@@ -11,6 +11,7 @@ public class ProductOrderMapper {
     ProductOrder productOrder
   ) {
     return ProductOrderResponse.builder()
+            .id(productOrder.getId())
             .productId(productOrder.getProduct().getId())
             .orderId(productOrder.getOrder().getId())
             .unityPrice(productOrder.getUnityPrice())
