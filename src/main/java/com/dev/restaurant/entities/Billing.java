@@ -39,7 +39,7 @@ public class Billing {
   private LocalDateTime createdAt;
 
   @Column(name = "closed_at")
-  private LocalDateTime closed_at;
+  private LocalDateTime closedAt;
 
   @JoinColumn(name = "order_id")
   @OneToOne(fetch = FetchType.LAZY)
