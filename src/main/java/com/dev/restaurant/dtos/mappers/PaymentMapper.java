@@ -22,7 +22,6 @@ public class PaymentMapper {
   public static Payment toEntity(PaymentRequest payment, Order order) {
     return Payment.builder()
             .order(order)
-            .value(payment.value())
             .paymentType(payment.paymentType())
             .status(payment.status())
             .externalTransactionCode(payment.externalTransactionCode())

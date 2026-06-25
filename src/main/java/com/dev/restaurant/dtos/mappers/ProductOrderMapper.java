@@ -32,7 +32,6 @@ public class ProductOrderMapper {
     return ProductOrder.builder()
             .product(product)
             .order(order)
-            .unityPrice(productOrderRequest.unityPrice())
             .quantity(productOrderRequest.quantity())
             .observation(productOrderRequest.observation())
             .status(productOrderRequest.status())
