@@ -20,6 +20,7 @@ public class GlobalHandleException {
             .timestamp(LocalDateTime.now())
             .status(HttpStatus.BAD_REQUEST.value())
             .error(e.getMessage())
+            .errorList(List.of())
             .build();
   }
 
@@ -55,6 +56,7 @@ public class GlobalHandleException {
             .timestamp(LocalDateTime.now())
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .error(e.getMessage())
+            .errorList(List.of())
             .build();
   }
 }
