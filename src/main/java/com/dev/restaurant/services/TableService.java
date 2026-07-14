@@ -22,6 +22,13 @@ public class TableService {
   private final RestaurantTableRepository tableRepository;
 
   public TableResponse create(TableRequest tableRequest) {
+
+    if(this.tableRepository.existsByTableNumber(tableRequest.number())) {
+      throw new BusinessRuleException(
+        String.format("Mesa já cadastrada com o número %s", tableRequest.number())
+      );
+    }
+
     return TableMapper.toResponse(
       this.tableRepository.save(
         TableMapper.toEntity(tableRequest)

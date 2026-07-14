@@ -10,7 +10,7 @@ public record TableRequest(
   @NotNull(message = "Campo number não pode ser nulo")
   @PositiveOrZero(message = "Campo number desse ser maior ou igual a zero")  
   Integer number,
-  @Positive(message = "Campo categoryId desse ser maior ou igual a zero")
+  @Positive(message = "Campo capacity desse ser maior ou igual a zero")
   Integer capacity,
   String description,
   StatusTable status
