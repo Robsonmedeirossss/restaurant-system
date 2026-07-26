@@ -7,6 +7,7 @@ import com.dev.restaurant.entities.CategoryProduct;
 public class CategoryProductMapper{
   public static CategoryProductResponse toResponse(CategoryProduct categoryProduct) {
     return CategoryProductResponse.builder()
+            .id(categoryProduct.getId())
             .name(categoryProduct.getName())
             .available(categoryProduct.getAvailable())
             .build();
@@ -15,7 +16,7 @@ public class CategoryProductMapper{
   public static CategoryProduct toEntity(CategoryProductRequest categoryProductRequest) {
     return CategoryProduct.builder()
             .name(categoryProductRequest.name())
-            .available(categoryProductRequest.available())
+            .available(categoryProductRequest.available() != null ? categoryProductRequest.available() : true)
             .build();
   }
 }

@@ -1,4 +1,4 @@
-package com.dev.restaurant.dtos.requests;
+package com.dev.restaurant.dtos.requests.updates;
 
 import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.enums.StatusTable;

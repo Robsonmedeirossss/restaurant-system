@@ -1,9 +1,13 @@
 package com.dev.restaurant.services;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.dev.restaurant.dtos.mappers.CategoryProductMapper;
 import com.dev.restaurant.dtos.requests.CategoryProductRequest;
+import com.dev.restaurant.dtos.requests.updates.CategoryProductUpdate;
 import com.dev.restaurant.dtos.responses.CategoryProductResponse;
 import com.dev.restaurant.entities.CategoryProduct;
 import com.dev.restaurant.exceptions.BusinessRuleException;
@@ -30,8 +34,23 @@ public class CategoryProductService {
     );
   }
 
+  public Set<CategoryProductResponse> findAll() {
+    return this.categoryProductRepository.findAll()
+      .stream()
+      .map(CategoryProductMapper::toResponse)
+      .collect(Collectors.toSet());
+  }
+
   public void deleteById(Long id) {
     this.categoryProductRepository.deleteById(id);
+  }
+
+  public CategoryProductResponse updateById(Long id, CategoryProductUpdate request) {
+    CategoryProduct categoryProduct = this.findEntityById(id);
+
+    return CategoryProductMapper.toResponse(
+      this.categoryProductRepository.save(request.merge(categoryProduct))
+    );
   }
 
   private CategoryProduct findEntityById(Long id) {

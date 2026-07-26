@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.restaurant.dtos.requests.TableRequest;
-import com.dev.restaurant.dtos.requests.TableUpdate;
+import com.dev.restaurant.dtos.requests.updates.TableUpdate;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.services.TableService;
 
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Mesas", description = "Endpoint para gerenciar as mesas do restaurante")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/restaurant/tables")
+@RequestMapping("/v1/restaurant/tables")
 public class TableController {
 
   private final TableService tableService;

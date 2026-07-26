@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.dev.restaurant.dtos.mappers.TableMapper;
 import com.dev.restaurant.dtos.requests.TableRequest;
-import com.dev.restaurant.dtos.requests.TableUpdate;
+import com.dev.restaurant.dtos.requests.updates.TableUpdate;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.exceptions.BusinessRuleException;

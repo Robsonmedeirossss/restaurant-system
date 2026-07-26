@@ -1,5 +1,7 @@
 package com.dev.restaurant.dtos.requests;
 
+import com.dev.restaurant.entities.CategoryProduct;
+
 import jakarta.validation.constraints.NotBlank;
 
 public record CategoryProductRequest(

@@ -34,12 +34,12 @@ public class RestaurantTable {
 
   private Integer number;
 
-  @Builder.Default private Integer capacity = 4;
+  private Integer capacity;
 
   private String description;
 
   @Enumerated(EnumType.STRING)
-  @Builder.Default private StatusTable status = StatusTable.FREE;
+  private StatusTable status;
 
   @CreationTimestamp
   @Column(name = "created_at")

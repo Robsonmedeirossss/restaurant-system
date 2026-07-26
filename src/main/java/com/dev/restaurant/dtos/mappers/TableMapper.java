@@ -3,6 +3,7 @@ package com.dev.restaurant.dtos.mappers;
 import com.dev.restaurant.dtos.requests.TableRequest;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.entities.RestaurantTable;
+import com.dev.restaurant.enums.StatusTable;
 
 public class TableMapper {
   public static TableResponse toResponse(RestaurantTable table) {
@@ -18,10 +19,10 @@ public class TableMapper {
 
   public static RestaurantTable toEntity(TableRequest table) {
     return RestaurantTable.builder()
-            .capacity(table.capacity())
+            .capacity(table.capacity() != null ? table.capacity() : 4)
             .number(table.number())
             .description(table.description())
-            .status(table.status())
+            .status(table.status() != null ? table.status() : StatusTable.FREE)
             .build();
   }
 
