@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.dev.restaurant.dtos.mappers.CategoryProductMapper;
-import com.dev.restaurant.dtos.requests.CategoryProductRequest;
+import com.dev.restaurant.dtos.requests.creates.CategoryProductRequest;
 import com.dev.restaurant.dtos.requests.updates.CategoryProductUpdate;
 import com.dev.restaurant.dtos.responses.CategoryProductResponse;
 import com.dev.restaurant.entities.CategoryProduct;

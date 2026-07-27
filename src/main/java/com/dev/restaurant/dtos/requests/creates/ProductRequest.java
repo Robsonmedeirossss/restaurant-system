@@ -1,4 +1,4 @@
-package com.dev.restaurant.dtos.requests;
+package com.dev.restaurant.dtos.requests.creates;
 
 import java.math.BigDecimal;
 
@@ -20,8 +20,8 @@ public record ProductRequest(
   @PositiveOrZero(message = "Campo preparationMinutes desse ser maior ou igual a zero")
   Integer preparationMinutes,
   @PositiveOrZero(message = "Campo stock desse ser maior ou igual a zero")
-  Integer Stock,
+  Integer stock,
   @NotNull(message = "Campo categoryId não pode ser nulo")
-  @PositiveOrZero(message = "Campo categoryId desse ser maior ou igual a zero")
+  @PositiveOrZero(message = "Campo categoryId desse ser um número maior ou igual a zero")
   Long categoryId
 ) {}

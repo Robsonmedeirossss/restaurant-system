@@ -5,11 +5,12 @@ import java.util.Set;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dev.restaurant.dtos.requests.CategoryProductRequest;
+import com.dev.restaurant.dtos.requests.creates.CategoryProductRequest;
 import com.dev.restaurant.dtos.requests.updates.CategoryProductUpdate;
 import com.dev.restaurant.dtos.responses.CategoryProductResponse;
 import com.dev.restaurant.services.CategoryProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
+@Tag(name = "Categories", description = "Categorias dos produtos")
 @RestController
 @RequestMapping("/v1/restaurant/categories-products")
 @RequiredArgsConstructor

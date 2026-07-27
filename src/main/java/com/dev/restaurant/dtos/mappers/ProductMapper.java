@@ -1,6 +1,6 @@
 package com.dev.restaurant.dtos.mappers;
 
-import com.dev.restaurant.dtos.requests.ProductRequest;
+import com.dev.restaurant.dtos.requests.creates.ProductRequest;
 import com.dev.restaurant.dtos.responses.ProductResponse;
 import com.dev.restaurant.entities.Product;
 
@@ -25,7 +25,7 @@ public class ProductMapper {
             .price(product.price())
             .available(product.available())
             .preparationMinutes(product.preparationMinutes())
-            .stock(product.Stock())
+            .stock(product.stock())
             .build();
   }
 }

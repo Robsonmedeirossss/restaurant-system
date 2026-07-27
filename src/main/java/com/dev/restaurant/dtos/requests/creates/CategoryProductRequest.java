@@ -1,4 +1,4 @@
-package com.dev.restaurant.dtos.requests;
+package com.dev.restaurant.dtos.requests.creates;
 
 import com.dev.restaurant.entities.CategoryProduct;
 

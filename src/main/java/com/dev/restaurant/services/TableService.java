@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.dev.restaurant.dtos.mappers.TableMapper;
-import com.dev.restaurant.dtos.requests.TableRequest;
+import com.dev.restaurant.dtos.requests.creates.TableRequest;
 import com.dev.restaurant.dtos.requests.updates.TableUpdate;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.entities.RestaurantTable;

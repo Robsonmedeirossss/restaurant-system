@@ -1,6 +1,6 @@
 package com.dev.restaurant.dtos.mappers;
 
-import com.dev.restaurant.dtos.requests.OrderRequest;
+import com.dev.restaurant.dtos.requests.creates.OrderRequest;
 import com.dev.restaurant.dtos.responses.OrderResponse;
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.RestaurantTable;

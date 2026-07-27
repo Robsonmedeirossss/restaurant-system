@@ -1,6 +1,6 @@
 package com.dev.restaurant.dtos.mappers;
 
-import com.dev.restaurant.dtos.requests.BillingRequest;
+import com.dev.restaurant.dtos.requests.creates.BillingRequest;
 import com.dev.restaurant.dtos.responses.BillingResponse;
 import com.dev.restaurant.entities.Billing;
 import com.dev.restaurant.entities.Order;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dev.restaurant.dtos.requests.TableRequest;
+import com.dev.restaurant.dtos.requests.creates.TableRequest;
 import com.dev.restaurant.dtos.requests.updates.TableUpdate;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.services.TableService;
