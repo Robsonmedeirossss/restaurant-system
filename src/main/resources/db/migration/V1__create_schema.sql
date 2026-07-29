@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS products(
   price NUMERIC(7, 2) NOT NULL CHECK(price >= 0),
   available BOOLEAN DEFAULT true,
   preparation_minutes INTEGER,
-  stock INTEGER,
+  stock INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP,
 
