@@ -14,15 +14,15 @@ public record TableUpdate(
 
   public RestaurantTable merge(RestaurantTable restaurantTable) {
     if(this.capacity() != null) {
-      restaurantTable.setCapacity(this.capacity);
+      restaurantTable.setCapacity(this.capacity());
     }
 
     if(this.description() != null) {
-      restaurantTable.setDescription(this.description);
+      restaurantTable.setDescription(this.description());
     }
 
     if(this.status() != null) {
-      restaurantTable.setStatus(this.status);
+      restaurantTable.setStatus(this.status());
     }
 
     return restaurantTable;

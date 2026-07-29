@@ -9,12 +9,12 @@ public record CategoryProductUpdate(
 
      public CategoryProduct merge(CategoryProduct categoryProduct) {
 
-    if(name != null) {
-      categoryProduct.setName(name);
+    if(this.name() != null) {
+      categoryProduct.setName(name());
     }
 
-    if(available != null) {
-      categoryProduct.setAvailable(available);
+    if(this.available() != null) {
+      categoryProduct.setAvailable(available());
     }
 
     return categoryProduct;

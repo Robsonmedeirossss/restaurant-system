@@ -13,7 +13,7 @@ public record ProductRequest(
   String name,
   @NotBlank(message = "Campo description não pode ser vazio")
   String description,
-  @NotBlank(message = "Campo name não pode ser vazio")
+  @NotNull(message = "Campo name não pode ser vazio")
   @PositiveOrZero(message = "Campo price desse ser maior ou igual a zero")
   BigDecimal price,
   Boolean available,

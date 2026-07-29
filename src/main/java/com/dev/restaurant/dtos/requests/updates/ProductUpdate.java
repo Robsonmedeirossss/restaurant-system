@@ -27,28 +27,28 @@ public record ProductUpdate(
 ) {
 
     public Product merge(Product product) {
-        if(name() != null) {
-            product.setName(name());
+        if(this.name() != null) {
+            product.setName(this.name());
         }
 
-        if(description() != null) {
-            product.setDescription(description());
+        if(this.description() != null) {
+            product.setDescription(this.description());
         }
         
-        if(price() != null) {
-            product.setPrice(price());
+        if(this.price() != null) {
+            product.setPrice(this.price());
         }
 
-        if(available() != null) {
-            product.setAvailable(available());
+        if(this.available() != null) {
+            product.setAvailable(this.available());
         }
 
-        if(preparationMinutes() != null) {
-            product.setPreparationMinutes(preparationMinutes());
+        if(this.preparationMinutes() != null) {
+            product.setPreparationMinutes(this.preparationMinutes());
         }
 
-        if(stock() != null) {
-            product.setStock(stock());
+        if(this.stock() != null) {
+            product.setStock(this.stock());
         }
 
         return product;
