@@ -53,7 +53,7 @@ public class CategoryProductService {
     );
   }
 
-  private CategoryProduct findEntityById(Long id) {
+  protected CategoryProduct findEntityById(Long id) {
     return this.categoryProductRepository.findById(id)
       .orElseThrow(() -> new BusinessRuleException(
         String.format("Nenhuma categoria encontrada para o id %s", id)
