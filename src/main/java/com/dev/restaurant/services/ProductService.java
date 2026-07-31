@@ -3,7 +3,9 @@ package com.dev.restaurant.services;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dev.restaurant.dtos.mappers.ProductMapper;
 import com.dev.restaurant.dtos.requests.creates.ProductRequest;
@@ -11,7 +13,6 @@ import com.dev.restaurant.dtos.requests.updates.ProductUpdate;
 import com.dev.restaurant.dtos.responses.ProductResponse;
 import com.dev.restaurant.entities.CategoryProduct;
 import com.dev.restaurant.entities.Product;
-import com.dev.restaurant.exceptions.BusinessRuleException;
 import com.dev.restaurant.repositories.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,8 @@ public class ProductService {
     private Product findEntityById (Long id) {
         return this.productRepository.findById(id)
             .orElseThrow(
-                () -> new BusinessRuleException(
+                () -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
                     String.format("Nenhum produto encontrado para o id %s", id)
                 )
         );

@@ -3,14 +3,15 @@ package com.dev.restaurant.services;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dev.restaurant.dtos.mappers.TableMapper;
 import com.dev.restaurant.dtos.requests.creates.TableRequest;
 import com.dev.restaurant.dtos.requests.updates.TableUpdate;
 import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.entities.RestaurantTable;
-import com.dev.restaurant.exceptions.BusinessRuleException;
 import com.dev.restaurant.repositories.RestaurantTableRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class TableService {
   public TableResponse create(TableRequest tableRequest) {
 
     if(this.tableRepository.existsByTableNumber(tableRequest.number())) {
-      throw new BusinessRuleException(
+      throw new ResponseStatusException(
+        HttpStatus.CONFLICT,
         String.format("Mesa já cadastrada com o número %s", tableRequest.number())
       );
     }
@@ -61,10 +63,12 @@ public class TableService {
     this.tableRepository.deleteById(id);
   }
 
-  private RestaurantTable findEntityById(Long id) {
+  protected RestaurantTable findEntityById(Long id) {
     return this.tableRepository.findById(id)
-      .orElseThrow(() -> new BusinessRuleException(String.format(
-        "Nenhuma mesa encontrada com o id %s", id)));
+      .orElseThrow(() -> new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        String.format("Nenhuma mesa encontrada com o id %s", id)
+      ));
   }
 
 }

@@ -3,14 +3,15 @@ package com.dev.restaurant.services;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.dev.restaurant.dtos.mappers.CategoryProductMapper;
 import com.dev.restaurant.dtos.requests.creates.CategoryProductRequest;
 import com.dev.restaurant.dtos.requests.updates.CategoryProductUpdate;
 import com.dev.restaurant.dtos.responses.CategoryProductResponse;
 import com.dev.restaurant.entities.CategoryProduct;
-import com.dev.restaurant.exceptions.BusinessRuleException;
 import com.dev.restaurant.repositories.CategoryProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -55,7 +56,8 @@ public class CategoryProductService {
 
   protected CategoryProduct findEntityById(Long id) {
     return this.categoryProductRepository.findById(id)
-      .orElseThrow(() -> new BusinessRuleException(
+      .orElseThrow(() -> new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
         String.format("Nenhuma categoria encontrada para o id %s", id)
       ));
   }

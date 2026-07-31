@@ -9,16 +9,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalHandleException {
 
-  @ExceptionHandler(BusinessRuleException.class)
+  @ExceptionHandler(ResponseStatusException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorResponse businessRuleException(BusinessRuleException e) {
+  public ErrorResponse businessRuleException(ResponseStatusException e) {
     return ErrorResponse.builder()
             .timestamp(LocalDateTime.now())
-            .status(HttpStatus.BAD_REQUEST.value())
+            .status(e.getStatusCode().value())
             .error(e.getMessage())
             .errorList(List.of())
             .build();
