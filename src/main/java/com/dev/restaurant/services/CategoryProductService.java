@@ -43,6 +43,7 @@ public class CategoryProductService {
   }
 
   public void deleteById(Long id) {
+    this.findEntityById(id);
     this.categoryProductRepository.deleteById(id);
   }
 

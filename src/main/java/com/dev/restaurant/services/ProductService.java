@@ -60,11 +60,12 @@ public class ProductService {
     }
 
     public void deleteById(Long id) {
+        this.findEntityById(id);
         this.productRepository.deleteById(id);
     }
 
 
-    private Product findEntityById (Long id) {
+    protected Product findEntityById (Long id) {
         return this.productRepository.findById(id)
             .orElseThrow(
                 () -> new ResponseStatusException(

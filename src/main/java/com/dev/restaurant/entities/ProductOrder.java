@@ -43,7 +43,7 @@ public class ProductOrder {
   private String observation;
 
   @Enumerated(EnumType.STRING)
-  @Builder.Default private StatusProductOrder status = StatusProductOrder.PENDING;
+  private StatusProductOrder status;
 
   @Column(name = "preparation_start_at")
   private LocalDateTime preparationStartAt;

@@ -1,5 +1,7 @@
 package com.dev.restaurant.dtos.mappers;
 
+import java.time.LocalDateTime;
+
 import com.dev.restaurant.dtos.requests.creates.BillingRequest;
 import com.dev.restaurant.dtos.responses.BillingResponse;
 import com.dev.restaurant.entities.Billing;
@@ -21,10 +23,14 @@ public class BillingMapper {
 
   public static Billing toEntity(BillingRequest biliing, Order order) {
     return  Billing.builder()
-              .subtotal(biliing.subtotal())
               .order(order)
-              .discount(biliing.discount())
-              .serviceTax(biliing.serviceTax())
+              .discount(biliing.discount() != null ? biliing.discount() : 0)
+              .serviceTax(biliing.serviceTax() != null ? biliing.serviceTax() : 0)
+              .closedAt(biliing.closedAt() != null 
+                ? biliing.closedAt() 
+                : LocalDateTime.now()
+              )
+              .createdAt(LocalDateTime.now())
               .build();
   }
 }

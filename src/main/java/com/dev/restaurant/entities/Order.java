@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.dev.restaurant.enums.StatusOrder;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,7 +39,7 @@ public class Order {
   @Builder.Default private StatusOrder status = StatusOrder.PENDING;
 
   @JoinColumn(name = "table_id")
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private RestaurantTable table;
 
   @Column(name = "opening_date")

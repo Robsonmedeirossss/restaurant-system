@@ -1,0 +1,70 @@
+package com.dev.restaurant.controllers;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dev.restaurant.dtos.requests.creates.OrderRequest;
+import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
+import com.dev.restaurant.dtos.responses.OrderResponse;
+import com.dev.restaurant.services.OrderService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Tag(name = "Orders", description = "Endpoint dos pedidos do restaurante")
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/v1/restaurant/orders")
+@Slf4j
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<OrderResponse> findAll() {
+        return this.orderService.findAll();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public OrderResponse findById(@PathVariable Long id) {
+        return this.orderService.findById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public OrderResponse create(@Valid @RequestBody OrderRequest request) {
+        System.out.println(String.format("O id chegou é: %s", request.tableId()));
+
+        return this.orderService.create(request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}")
+    public OrderResponse updateById(
+        @PathVariable Long id,
+        @Valid @RequestBody OrderUpdate request
+    ) {
+        return this.orderService.updateById(id, request);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        this.orderService.deleteById(id);
+    }
+    
+}

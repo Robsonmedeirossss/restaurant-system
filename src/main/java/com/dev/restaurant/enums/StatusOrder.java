@@ -5,5 +5,9 @@ public enum StatusOrder {
   DOING,
   DONE,
   DELIVERED,
-  CANCELED
+  CANCELED;
+
+  public boolean canBeAdd() {
+    return this == PENDING || this == DOING;
+  }
 }

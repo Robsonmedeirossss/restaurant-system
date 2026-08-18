@@ -60,6 +60,7 @@ public class TableService {
   }
 
   public void deleteById(Long id) {
+    this.findEntityById(id);
     this.tableRepository.deleteById(id);
   }
 

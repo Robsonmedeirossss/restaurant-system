@@ -5,9 +5,10 @@ import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.entities.ProductOrder;
+import com.dev.restaurant.enums.StatusProductOrder;
 
 public class ProductOrderMapper {
-  public static ProductOrderResponse toResponde(
+  public static ProductOrderResponse toResponse(
     ProductOrder productOrder
   ) {
     return ProductOrderResponse.builder()
@@ -34,7 +35,11 @@ public class ProductOrderMapper {
             .order(order)
             .quantity(productOrderRequest.quantity())
             .observation(productOrderRequest.observation())
-            .status(productOrderRequest.status())
+            .status(
+              productOrderRequest.status() != null 
+              ? productOrderRequest.status() 
+              : StatusProductOrder.PENDING
+            )
             .build();
   }
 }
