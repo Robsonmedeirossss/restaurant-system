@@ -3,7 +3,6 @@ package com.dev.restaurant.dtos.requests.updates;
 import java.time.LocalDateTime;
 
 import com.dev.restaurant.entities.Order;
-import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.enums.StatusOrder;
 
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,13 +15,9 @@ public record OrderUpdate(
     LocalDateTime openingDate,
     LocalDateTime closingDate
 ) {
-    public Order merge(Order order, RestaurantTable table) {
+    public Order merge(Order order) {
         if(status() != null) {
             order.setStatus(status());
-        }
-
-        if(tableId() != null) {
-            order.setTable(table);
         }
 
         if(observation() != null) {

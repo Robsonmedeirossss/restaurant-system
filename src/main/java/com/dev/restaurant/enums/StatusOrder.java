@@ -4,10 +4,14 @@ public enum StatusOrder {
   PENDING,
   DOING,
   DONE,
-  DELIVERED,
   CANCELED;
 
   public boolean canBeAdd() {
     return this == PENDING || this == DOING;
   }
+
+  public boolean cantBeClosed() {
+    return this == PENDING || this == CANCELED;
+  }
+
 }

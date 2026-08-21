@@ -1,5 +1,6 @@
 package com.dev.restaurant.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class OrderService {
     }
 
     public OrderResponse findById(Long id) {
+        System.out.println(this.getSubtotal(id) + "Aqui aqui aqui");
         return OrderMapper.toResponse(
             this.findEntityById(id)
         );
@@ -41,6 +43,12 @@ public class OrderService {
     public OrderResponse create(OrderRequest request) {
         
         RestaurantTable table = tableService.findEntityById(request.tableId());
+        if(table.getStatus() != StatusTable.FREE) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                String.format("Não é possível criar um pedido para mesa com status %s", table.getStatus()));
+        }
+
         table.setStatus(StatusTable.BUSY);
 
         return OrderMapper.toResponse(
@@ -53,13 +61,11 @@ public class OrderService {
 
         if(request.tableId() != null) {
             RestaurantTable table = this.tableService.findEntityById(request.tableId());
-            return OrderMapper.toResponse(
-                this.orderRepository.save(request.merge(order, table))
-            );
+            order.setTable(table);
         }
 
         return OrderMapper.toResponse(
-            this.orderRepository.save(request.merge(order, order.getTable()))
+            this.orderRepository.save(request.merge(order))
         );
     }
 
@@ -68,12 +74,15 @@ public class OrderService {
         this.orderRepository.deleteById(id);
     }
     
-
     protected Order findEntityById(Long id) {
         return this.orderRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, 
                 String.format("Nenhuma pedido encontrado para o id %s", id)
             ));
+    }
+
+    protected BigDecimal getSubtotal(Long orderId) {
+        return this.orderRepository.getSubtotal(orderId);
     }
 }

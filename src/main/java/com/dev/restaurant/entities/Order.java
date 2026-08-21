@@ -1,6 +1,7 @@
 package com.dev.restaurant.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -53,4 +55,11 @@ public class Order {
   @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime createdAt;
+
+  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+  List<ProductOrder> productOrders;
+
+  public void markOrderAsDone() {
+    this.status = StatusOrder.DONE;
+  }
 }
