@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS orders(
       'PENDING',
       'DOING',
       'DONE',
-      'DELIVERED',
       'CANCELED'
     )
   ) DEFAULT 'PENDING',
@@ -78,7 +77,9 @@ CREATE TABLE IF NOT EXISTS products_orders(
       'CANCELED'
     )
   ) DEFAULT 'PENDING',
-  created_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP DEFAULT NOW(),
+
+  CONSTRAINT unique_pro_ord UNIQUE(product_id, order_id)
 );
 
 CREATE INDEX idx_products_orders_order ON products_orders(order_id);
@@ -87,7 +88,7 @@ CREATE INDEX idx_products_orders_product ON products_orders(product_id);
 
 CREATE TABLE IF NOT EXISTS billings(
   id BIGSERIAL PRIMARY KEY,
-  order_id BIGINT REFERENCES orders(id),
+  order_id BIGINT UNIQUE REFERENCES orders(id),
   subtotal NUMERIC(7,2) NOT NULL CHECK (subtotal >= 0),
   discount INTEGER,
   service_tax INTEGER,

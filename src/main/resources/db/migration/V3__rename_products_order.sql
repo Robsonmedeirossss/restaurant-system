@@ -1,0 +1,1 @@
+ALTER TABLE "products_orders" RENAME  TO "products_order";
