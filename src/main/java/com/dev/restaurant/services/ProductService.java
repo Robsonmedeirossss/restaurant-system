@@ -48,11 +48,12 @@ public class ProductService {
 
     public ProductResponse updateById(Long id, ProductUpdate request) {
 
-        if(request.categoryId() != null) {
-            this.categoryProductService.findById(request.categoryId());
-        }
-
         Product product = this.findEntityById(id);
+
+        if(request.categoryId() != null) {
+            CategoryProduct category = this.categoryProductService.findEntityById(request.categoryId());
+            product.setCategoryProduct(category);
+        }
 
         return ProductMapper.toResponse(
             this.productRepository.save(request.merge(product))
