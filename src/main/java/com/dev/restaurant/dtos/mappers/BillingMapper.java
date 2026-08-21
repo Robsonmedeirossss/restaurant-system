@@ -21,13 +21,13 @@ public class BillingMapper {
             .build();
   }
 
-  public static Billing toEntity(BillingRequest biliing, Order order) {
+  public static Billing toEntity(BillingRequest billing, Order order) {
     return  Billing.builder()
               .order(order)
-              .discount(biliing.discount() != null ? biliing.discount() : 0)
-              .serviceTax(biliing.serviceTax() != null ? biliing.serviceTax() : 0)
-              .closedAt(biliing.closedAt() != null 
-                ? biliing.closedAt() 
+              .discount(billing.discount() != null ? billing.discount() : 0)
+              .serviceTax(billing.serviceTax() != null ? billing.serviceTax() : 0)
+              .closedAt(billing.closedAt() != null 
+                ? billing.closedAt() 
                 : LocalDateTime.now()
               )
               .createdAt(LocalDateTime.now())
