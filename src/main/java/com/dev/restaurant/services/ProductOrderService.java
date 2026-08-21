@@ -49,14 +49,21 @@ public class ProductOrderService {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 String.format("""
-                    Quantidade de %s insuficiente no estoque, solicitado: %s, dispon[ivel: %s""",
+                    Quantidade de %s insuficiente no estoque, solicitado: %s, disponível: %s""",
                     product.getName(), request.quantity(), product.getStock()));
         }
 
         if(!order.getStatus().canBeAdd()) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "item s[o pode ser adiconado para pedidos com status: PENDING ou DOING");
+                "item só pode ser adicionado para pedidos com status: PENDING ou DOING");
+        }
+
+        if(this.productOrderAlreadyExists(product.getId(), order.getId())) {
+            log.error("Produto já existe no pedido, para adicionar mais, atualize a quantidade com patch");;
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Produto já está cadastrado para esse pedido");
         }
 
         return ProductOrderMapper.toResponse(
@@ -93,6 +100,10 @@ public class ProductOrderService {
                     HttpStatus.NOT_FOUND,
                     String.format("Nenhum item de pedido encontrado para o id %s", id)
                 ));
+    }
+
+    private boolean productOrderAlreadyExists(Long productId, Long orderId) {
+        return this.productOrderRepository.productOrderAlreadyExists(productId, orderId);
     }
 
 }

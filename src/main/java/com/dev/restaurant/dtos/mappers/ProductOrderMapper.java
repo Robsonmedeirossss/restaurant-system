@@ -1,5 +1,7 @@
 package com.dev.restaurant.dtos.mappers;
 
+import java.time.LocalDateTime;
+
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.entities.Order;
@@ -40,6 +42,8 @@ public class ProductOrderMapper {
               ? productOrderRequest.status() 
               : StatusProductOrder.PENDING
             )
+            .preparationStartAt(LocalDateTime.now())
+            .unityPrice(product.getPrice())
             .build();
   }
 }

@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Product orders", description = "Endpoint para os itens do pedido")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/restaurant/products-orders")
+@RequestMapping("/v1/restaurant/products-order")
 public class ProductOrderController {
-    private ProductOrderService productOrderService;
+    private final ProductOrderService productOrderService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
