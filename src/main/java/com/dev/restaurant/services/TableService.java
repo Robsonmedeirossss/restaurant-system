@@ -22,6 +22,19 @@ public class TableService {
 
   private final RestaurantTableRepository tableRepository;
 
+  public Set<TableResponse> findAll() {
+    return this.tableRepository.findAll()
+      .stream()
+      .map(TableMapper::toResponse)
+      .collect(Collectors.toSet());
+  }
+
+  public TableResponse findById(Long id) {
+    return TableMapper.toResponse(
+      this.findEntityById(id)
+    );
+  }
+
   public TableResponse create(TableRequest tableRequest) {
 
     if(this.tableRepository.existsByTableNumber(tableRequest.number())) {
@@ -36,19 +49,6 @@ public class TableService {
         TableMapper.toEntity(tableRequest)
       )
     );
-  }
-
-  public TableResponse findById(Long id) {
-    return TableMapper.toResponse(
-      this.findEntityById(id)
-    );
-  }
-
-  public Set<TableResponse> findAll() {
-    return this.tableRepository.findAll()
-      .stream()
-      .map(TableMapper::toResponse)
-      .collect(Collectors.toSet());
   }
 
   public TableResponse updateById(Long id, TableUpdate tableUpdate) {
