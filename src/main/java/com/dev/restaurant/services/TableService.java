@@ -14,6 +14,7 @@ import com.dev.restaurant.dtos.responses.TableResponse;
 import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.repositories.RestaurantTableRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,6 +36,7 @@ public class TableService {
     );
   }
 
+  @Transactional
   public TableResponse create(TableRequest tableRequest) {
 
     if(this.tableRepository.existsByTableNumber(tableRequest.number())) {

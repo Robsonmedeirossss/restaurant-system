@@ -16,6 +16,7 @@ import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.enums.StatusTable;
 import com.dev.restaurant.repositories.OrderRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +41,7 @@ public class OrderService {
         );
     }
 
+    @Transactional
     public OrderResponse create(OrderRequest request) {
         
         RestaurantTable table = tableService.findEntityById(request.tableId());
@@ -56,6 +58,7 @@ public class OrderService {
         );
     }
 
+    @Transactional
     public OrderResponse updateById(Long id, OrderUpdate request) {
         Order order = this.findEntityById(id);
 

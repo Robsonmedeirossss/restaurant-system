@@ -14,11 +14,9 @@ import com.dev.restaurant.dtos.requests.updates.BillingUpdate;
 import com.dev.restaurant.dtos.responses.BillingResponse;
 import com.dev.restaurant.entities.Billing;
 import com.dev.restaurant.entities.Order;
-import com.dev.restaurant.enums.StatusOrder;
 import com.dev.restaurant.repositories.BillingRepository;
 import com.dev.restaurant.repositories.OrderRepository;
 
-import jakarta.persistence.EnumType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 

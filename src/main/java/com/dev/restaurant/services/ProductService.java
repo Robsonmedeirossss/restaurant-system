@@ -15,6 +15,7 @@ import com.dev.restaurant.entities.CategoryProduct;
 import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.repositories.ProductRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,6 +37,7 @@ public class ProductService {
         );
     }
 
+    @Transactional
     public ProductResponse create(ProductRequest request) {
 
         CategoryProduct category = this.categoryProductService.findEntityById(request.categoryId());

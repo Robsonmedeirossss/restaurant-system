@@ -15,6 +15,7 @@ import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.entities.ProductOrder;
 import com.dev.restaurant.repositories.ProductOrderRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +41,7 @@ public class ProductOrderService {
         );
     }
 
+    @Transactional
     public ProductOrderResponse create(ProductOrderRequest request) {
 
         Product product = this.productService.findEntityById(request.productId());
@@ -66,11 +68,14 @@ public class ProductOrderService {
                 "Produto já está cadastrado para esse pedido");
         }
 
+        product.setStock(product.getStock() - request.quantity());
+
         return ProductOrderMapper.toResponse(
             this.productOrderRepository.save(ProductOrderMapper.toEntity(request, product, order))
         );
     }
 
+    @Transactional
     public ProductOrderResponse updateById(Long id, ProductOrderUpdate request) {
         ProductOrder productOrder = this.findEntityById(id);
         Product product = productOrder.getProduct();
