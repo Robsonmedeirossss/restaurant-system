@@ -28,7 +28,7 @@ public class ProductMapper {
             .description(product.description())
             .price(product.price())
             .available(product.available() != null ? product.available() : true)
-            .preparationMinutes(product.preparationMinutes())
+            .preparationMinutes(product.preparationMinutes() != null ? product.preparationMinutes() : 30)
             .stock(product.stock() != null ? product.stock() : 0)
             .categoryProduct(category)
             .createdAt(LocalDateTime.now())

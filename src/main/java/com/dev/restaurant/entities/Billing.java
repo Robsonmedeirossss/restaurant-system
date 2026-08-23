@@ -12,8 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,9 +31,10 @@ public class Billing {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "discount_percent")
   private Integer discount;
 
-  @Column(name = "service_tax")
+  @Column(name = "service_tax_percent")
   private Integer serviceTax;
   private BigDecimal subtotal;
   private BigDecimal total;
