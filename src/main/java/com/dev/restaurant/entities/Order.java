@@ -62,4 +62,8 @@ public class Order {
   public void markOrderAsDone() {
     this.status = StatusOrder.DONE;
   }
+
+  public void addProductOrder(ProductOrder productOrder) {
+    this.productOrders.add(productOrder);
+  }
 }

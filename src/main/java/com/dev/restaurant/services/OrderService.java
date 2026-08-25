@@ -8,13 +8,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.dev.restaurant.dtos.mappers.OrderMapper;
+import com.dev.restaurant.dtos.mappers.ProductOrderMapper;
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
+import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
+import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
+import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.entities.Order;
+import com.dev.restaurant.entities.Product;
+import com.dev.restaurant.entities.ProductOrder;
 import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.enums.StatusTable;
 import com.dev.restaurant.repositories.OrderRepository;
+import com.dev.restaurant.repositories.ProductOrderRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderService {
+
     private final OrderRepository orderRepository;
     private final TableService tableService;
+    private final ProductService productService;
+    private final ProductOrderRepository productOrderRepository; 
 
     public List<OrderResponse> findAll() {
         return this.orderRepository.findAll()
@@ -85,7 +95,99 @@ public class OrderService {
             ));
     }
 
+     protected ProductOrder findProductOrderEntityById(Long id) {
+        return this.productOrderRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, 
+                String.format("Nenhum product order encontrado para o id %s", id)
+            ));
+    }
+
     protected BigDecimal getSubtotal(Long orderId) {
         return this.orderRepository.getSubtotal(orderId);
     }
+
+    @Transactional
+    public ProductOrderResponse addProductOrder(Long orderId, ProductOrderRequest request) {
+        Order order = this.findEntityById(orderId);
+        Product product = this.productService.findEntityById(request.productId());
+
+        if(this.orderRepository.productOrderAlreadyExists(order.getId(), product.getId())){
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Produto já existe no pedido, se quiser alterar a quantidade, utilize o patch"
+            );
+        }
+        
+        if(!order.getStatus().canBeAdd()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Não é possível adicionar um item para um pedido cujo status não é: PENDING  ou DOING"
+            );
+        }
+
+        if(product.getStock() < request.quantity()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                String.format( 
+                "Estoque insuficiente para adicionar o produto,solicitado: %s, disponível: %s ",
+                 request.quantity(), product.getStock())
+            );
+        }
+
+        ProductOrder productOrder = this.productOrderRepository.save(ProductOrderMapper.toEntity(
+            request, product, order));
+        
+        order.addProductOrder(productOrder);
+
+        return ProductOrderMapper.toResponse(productOrder, product);
+    }
+
+    public List<ProductOrderResponse> findAllProductsOrderByOrderId(Long orderId) {
+
+        Order order = this.findEntityById(orderId);
+
+        return this.orderRepository.findProductsOrderByOrderId(order.getId())
+            .stream()
+            .map(productOrder -> ProductOrderMapper.toResponse(
+                productOrder,
+                productOrder.getProduct()))
+            .toList();
+    }
+
+    public ProductOrderResponse findProductOrderById(
+        Long orderId,
+        Long productOrderId
+    ) {
+
+        this.findEntityById(orderId);
+        ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
+
+        return ProductOrderMapper.toResponse(
+            productOrder,
+            productOrder.getProduct()
+        );
+   }
+
+   public ProductOrderResponse updateProductOrderById(
+    Long orderId,
+    Long productOrderId,
+    ProductOrderUpdate request
+    ) {
+
+        this.findEntityById(orderId);
+        ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
+
+        return ProductOrderMapper.toResponse(
+            this.productOrderRepository.save(request.merge(productOrder)),
+            productOrder.getProduct()
+        );
+   }
+
+   public void deleteProductOrderById(Long orderId, Long productOrderId) {
+        this.findEntityById(orderId);
+        this.findProductOrderEntityById(productOrderId);
+
+        this.productOrderRepository.deleteById(productOrderId);
+   }
 }

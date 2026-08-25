@@ -11,7 +11,8 @@ import com.dev.restaurant.enums.StatusProductOrder;
 
 public class ProductOrderMapper {
   public static ProductOrderResponse toResponse(
-    ProductOrder productOrder
+    ProductOrder productOrder,
+    Product product
   ) {
     return ProductOrderResponse.builder()
             .id(productOrder.getId())
@@ -23,6 +24,7 @@ public class ProductOrderMapper {
             .preparationStartAt(productOrder.getPreparationStartAt())
             .preparationEndAt(productOrder.getPreparationEndAt())
             .status(productOrder.getStatus())
+            .productName(product.getName())
             .createdAt(productOrder.getCreatedAt())
             .build();
   }

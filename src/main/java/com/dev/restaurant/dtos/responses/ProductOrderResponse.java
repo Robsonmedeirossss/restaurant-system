@@ -11,6 +11,7 @@ import lombok.Builder;
 public record ProductOrderResponse(
   Long id,
   Long productId,
+  String productName,
   Long orderId,
   BigDecimal unityPrice,
   Integer quantity,

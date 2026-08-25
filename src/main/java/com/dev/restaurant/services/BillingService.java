@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BillingService {
 
-    private final OrderRepository orderRepository;
     private final BillingRepository billingRepository;
     private final OrderService orderService;
 
@@ -69,7 +68,7 @@ public class BillingService {
         
         Billing billing = BillingMapper.toEntity(request, order);
 
-        BigDecimal subtotal = this.orderRepository.getSubtotal(order.getId());  
+        BigDecimal subtotal = this.orderService.getSubtotal(order.getId());  
         BigDecimal total = this.getTotal(billing, subtotal);
 
 

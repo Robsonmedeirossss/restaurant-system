@@ -11,12 +11,9 @@ public record ProductOrderRequest(
   Long productId,
 
   @NotNull(message = "Campo orderId é obrigatório")
-  @PositiveOrZero(message = "Campo orderId deve ser maior ou igual a zero")
-  Long orderId,
-
-  @NotNull(message = "Campo orderId é obrigatório")
   @PositiveOrZero(message = "Campo orderId deve ser maior ou igual a zero") 
   Integer quantity,
+  
   String observation,
   StatusProductOrder status
 ) {}

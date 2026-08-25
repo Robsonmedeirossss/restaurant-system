@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
+import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
+import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
+import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.services.OrderService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -65,6 +68,49 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         this.orderService.deleteById(id);
+    }
+
+    @PostMapping("/{orderId}/products")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductOrderResponse findAllProductOrderByOrderId(
+        @PathVariable Long orderId,
+        @Valid @RequestBody ProductOrderRequest request
+    ) {
+        return this.orderService.addProductOrder(orderId, request);
+    }
+
+    @GetMapping("/{orderId}/products")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductOrderResponse> findAllProductOrderByOrderId(@PathVariable Long orderId) {
+        return this.orderService.findAllProductsOrderByOrderId(orderId);
+    }
+
+    @GetMapping("/{orderId}/products/{productOrderId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findByProductOrderById(
+        @PathVariable Long orderId,
+        @PathVariable Long productOrderId
+    ) {
+        this.orderService.findProductOrderById(orderId, productOrderId);
+    }
+
+    @PatchMapping("/{orderId}/products/{productOrderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductOrderResponse updateProductOrderById(
+        @PathVariable Long orderId,
+        @PathVariable Long productOrderId,
+        @Valid @RequestBody ProductOrderUpdate request 
+    ) {
+        return this.orderService.updateProductOrderById(orderId, productOrderId, request);
+    }
+
+    @DeleteMapping("/{orderId}/products/{productOrderId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateProductOrderById(
+        @PathVariable Long orderId,
+        @PathVariable Long productOrderId
+    ) {
+        this.orderService.deleteProductOrderById(orderId, productOrderId);
     }
     
 }
