@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
+import com.dev.restaurant.dtos.requests.updates.ProductOrderStatusRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
@@ -35,20 +36,20 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<OrderResponse> findAll() {
         return this.orderService.findAll();
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public OrderResponse findById(@PathVariable Long id) {
         return this.orderService.findById(id);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse create(@Valid @RequestBody OrderRequest request) {
         System.out.println(String.format("O id chegou é: %s", request.tableId()));
 
@@ -64,13 +65,13 @@ public class OrderController {
         return this.orderService.updateById(id, request);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         this.orderService.deleteById(id);
     }
 
-    @PostMapping("/{orderId}/products")
+    @PostMapping("/{orderId}/products-order")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductOrderResponse findAllProductOrderByOrderId(
         @PathVariable Long orderId,
@@ -79,22 +80,22 @@ public class OrderController {
         return this.orderService.addProductOrder(orderId, request);
     }
 
-    @GetMapping("/{orderId}/products")
+    @GetMapping("/{orderId}/products-order")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductOrderResponse> findAllProductOrderByOrderId(@PathVariable Long orderId) {
         return this.orderService.findAllProductsOrderByOrderId(orderId);
     }
 
-    @GetMapping("/{orderId}/products/{productOrderId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void findByProductOrderById(
+    @GetMapping("/{orderId}/products-order/{productOrderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductOrderResponse findByProductOrderById(
         @PathVariable Long orderId,
         @PathVariable Long productOrderId
     ) {
-        this.orderService.findProductOrderById(orderId, productOrderId);
+        return this.orderService.findProductOrderById(orderId, productOrderId);
     }
 
-    @PatchMapping("/{orderId}/products/{productOrderId}")
+    @PatchMapping("/{orderId}/products-order/{productOrderId}")
     @ResponseStatus(HttpStatus.OK)
     public ProductOrderResponse updateProductOrderById(
         @PathVariable Long orderId,
@@ -104,7 +105,17 @@ public class OrderController {
         return this.orderService.updateProductOrderById(orderId, productOrderId, request);
     }
 
-    @DeleteMapping("/{orderId}/products/{productOrderId}")
+    @PatchMapping("/{orderId}/products-order/{productOrderId}/status")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductOrderResponse changeStatusById(
+        @PathVariable Long orderId,
+        @PathVariable Long productOrderId,
+        @Valid @RequestBody ProductOrderStatusRequest statusRequest
+    ) {
+        return this.orderService.changeStatusById(orderId, productOrderId, statusRequest);
+    }
+
+    @DeleteMapping("/{orderId}/products-order/{productOrderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProductOrderById(
         @PathVariable Long orderId,

@@ -1,17 +1,13 @@
 package com.dev.restaurant.dtos.requests.updates;
 
-import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.entities.ProductOrder;
-import com.dev.restaurant.enums.StatusProductOrder;
 
 import jakarta.validation.constraints.PositiveOrZero;
 
 public record ProductOrderUpdate(
     @PositiveOrZero(message = "Campo quantity deve ser maior ou igual a zero")
     Integer quantity,
-    String observation,
-    StatusProductOrder status
-
+    String observation
 ) {
     public ProductOrder merge(
         ProductOrder productOrder
@@ -23,10 +19,6 @@ public record ProductOrderUpdate(
 
         if(observation() != null) {
             productOrder.setObservation(observation());
-        }
-
-        if(status() != null) {
-            productOrder.setStatus(status());
         }
 
         return productOrder;

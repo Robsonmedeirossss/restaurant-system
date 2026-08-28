@@ -12,6 +12,7 @@ import com.dev.restaurant.dtos.mappers.ProductOrderMapper;
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
+import com.dev.restaurant.dtos.requests.updates.ProductOrderStatusRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
@@ -19,6 +20,7 @@ import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.entities.ProductOrder;
 import com.dev.restaurant.entities.RestaurantTable;
+import com.dev.restaurant.enums.StatusOrder;
 import com.dev.restaurant.enums.StatusTable;
 import com.dev.restaurant.repositories.OrderRepository;
 import com.dev.restaurant.repositories.ProductOrderRepository;
@@ -137,7 +139,8 @@ public class OrderService {
 
         ProductOrder productOrder = this.productOrderRepository.save(ProductOrderMapper.toEntity(
             request, product, order));
-        
+
+         
         order.addProductOrder(productOrder);
 
         return ProductOrderMapper.toResponse(productOrder, product);
@@ -189,5 +192,29 @@ public class OrderService {
         this.findProductOrderEntityById(productOrderId);
 
         this.productOrderRepository.deleteById(productOrderId);
+   }
+
+   @Transactional
+   public ProductOrderResponse changeStatusById(Long orderId, Long productOrderId, ProductOrderStatusRequest statusRequest) {
+    Order order = this.findEntityById(orderId);    
+    ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
+
+        if(!productOrder.getStatus().canTransiction(statusRequest.status())){
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                String.format(
+                    "Não é possível alterar o status de [%s] para [%s].",
+                    productOrder.getStatus(), statusRequest.status())
+                );
+        }
+
+
+        productOrder.setStatus(statusRequest.status());
+
+        if(productOrder.getStatus().isDoing()) {
+            order.setStatus(StatusOrder.DOING);
+        }
+
+        return ProductOrderMapper.toResponse(productOrder, productOrder.getProduct());
    }
 }

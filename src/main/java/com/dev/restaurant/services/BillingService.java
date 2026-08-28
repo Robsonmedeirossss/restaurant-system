@@ -65,6 +65,17 @@ public class BillingService {
                 "Não é possível fechar a conta para um pedido com status PENDING ou CANCELED, pedido deve estar com status DOING"
             );
         }
+
+        order.getProductOrders().stream()
+            .forEach(productOrder -> {
+                if(!productOrder.getStatus().isDone()) {
+                    throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Todos os itens do pedido devem estar com status DONE"
+                    );
+                }
+            });
+        
         
         Billing billing = BillingMapper.toEntity(request, order);
 
