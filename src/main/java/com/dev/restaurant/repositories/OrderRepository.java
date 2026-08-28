@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         from orders o
         left join products_order order_product
         on o.id = order_product.order_id 
-        where o.id = :orderId
+        where o.id = :orderId AND order_product.status <> 'CANCELED'
         group by o.id;      
     """, nativeQuery = true)
     BigDecimal getSubtotal(@Param("orderId") Long orderId);
