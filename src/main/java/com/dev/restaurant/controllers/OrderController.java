@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
+import com.dev.restaurant.dtos.requests.filters.ProductOrderFilter;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderStatusRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
+import com.dev.restaurant.dtos.responses.PageProductOrderResponse;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.services.OrderService;
 
@@ -85,6 +87,15 @@ public class OrderController {
     public List<ProductOrderResponse> findAllProductOrderByOrderId(@PathVariable Long orderId) {
         return this.orderService.findAllProductsOrderByOrderId(orderId);
     }
+
+    @GetMapping("/products-order")
+    @ResponseStatus(HttpStatus.OK)
+    public PageProductOrderResponse findAllProductsOrder(
+        ProductOrderFilter requestFilters
+    ) {
+        return this.orderService.findAllProductOrder(requestFilters);
+    }
+
 
     @GetMapping("/{orderId}/products-order/{productOrderId}")
     @ResponseStatus(HttpStatus.OK)

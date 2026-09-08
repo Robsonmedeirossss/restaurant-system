@@ -1,8 +1,13 @@
 package com.dev.restaurant.services;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,19 +16,23 @@ import com.dev.restaurant.dtos.mappers.OrderMapper;
 import com.dev.restaurant.dtos.mappers.ProductOrderMapper;
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
+import com.dev.restaurant.dtos.requests.filters.ProductOrderFilter;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderStatusRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
+import com.dev.restaurant.dtos.responses.PageProductOrderResponse;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.Product;
 import com.dev.restaurant.entities.ProductOrder;
 import com.dev.restaurant.entities.RestaurantTable;
 import com.dev.restaurant.enums.StatusOrder;
+import com.dev.restaurant.enums.StatusProductOrder;
 import com.dev.restaurant.enums.StatusTable;
 import com.dev.restaurant.repositories.OrderRepository;
 import com.dev.restaurant.repositories.ProductOrderRepository;
+import com.dev.restaurant.specifications.ProductOrderSpecification;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -143,7 +152,7 @@ public class OrderService {
          
         order.addProductOrder(productOrder);
 
-        return ProductOrderMapper.toResponse(productOrder, product);
+        return ProductOrderMapper.toResponse(productOrder);
     }
 
     public List<ProductOrderResponse> findAllProductsOrderByOrderId(Long orderId) {
@@ -152,9 +161,7 @@ public class OrderService {
 
         return this.orderRepository.findProductsOrderByOrderId(order.getId())
             .stream()
-            .map(productOrder -> ProductOrderMapper.toResponse(
-                productOrder,
-                productOrder.getProduct()))
+            .map(ProductOrderMapper::toResponse)
             .toList();
     }
 
@@ -167,8 +174,7 @@ public class OrderService {
         ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
 
         return ProductOrderMapper.toResponse(
-            productOrder,
-            productOrder.getProduct()
+            productOrder
         );
    }
 
@@ -182,8 +188,7 @@ public class OrderService {
         ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
 
         return ProductOrderMapper.toResponse(
-            this.productOrderRepository.save(request.merge(productOrder)),
-            productOrder.getProduct()
+            this.productOrderRepository.save(request.merge(productOrder))
         );
    }
 
@@ -208,13 +213,53 @@ public class OrderService {
                 );
         }
 
-
         productOrder.setStatus(statusRequest.status());
 
         if(productOrder.getStatus().isDoing()) {
             order.setStatus(StatusOrder.DOING);
+            productOrder.setPreparationStartAt(LocalDateTime.now());
         }
 
-        return ProductOrderMapper.toResponse(productOrder, productOrder.getProduct());
+        if(productOrder.getStatus().isDone()) {
+            productOrder.setPreparationEndAt(LocalDateTime.now());
+        }
+
+        return ProductOrderMapper.toResponse(productOrder);
    }
-}
+
+    public PageProductOrderResponse findAllProductOrder(ProductOrderFilter requestFilters) {
+            ProductOrderFilter filter = requestFilters.setDefault();
+
+            Sort sort = Sort.by(
+                Sort.Direction.fromString(filter.direction()),
+                filter.orderBy()
+            );
+
+            Pageable pageable = PageRequest.of(filter.page(), filter.size(), sort);
+
+            Page<ProductOrder> productsOrdersPage = this.productOrderRepository.findAll(
+                ProductOrderSpecification.withFilters(requestFilters),
+                pageable
+            );
+
+            List<ProductOrderResponse> productsOrdersResponse = productsOrdersPage
+                .getContent()
+                .stream()
+                .map(ProductOrderMapper::toResponse)
+                .toList();
+            
+            return PageProductOrderResponse.builder()
+                .productsOrder(productsOrdersResponse)
+                .page(productsOrdersPage.getNumber())
+                .totalElements(((int)productsOrdersPage.getTotalElements()))
+                .totalPages(productsOrdersPage.getTotalPages())
+                .build();
+            
+        }
+
+        public List<ProductOrder> findAllDoingProductsOrders() {
+            return this.productOrderRepository.findByStatus(StatusProductOrder.DOING)
+            .stream()
+            .toList();
+        }
+}   

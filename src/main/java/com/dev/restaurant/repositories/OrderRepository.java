@@ -3,6 +3,8 @@ package com.dev.restaurant.repositories;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.ProductOrder;
+import com.dev.restaurant.enums.StatusProductOrder;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -43,4 +46,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                 WHERE order_id = :orderId;
             """, nativeQuery = true)
     List<ProductOrder> findProductsOrderByOrderId(@Param("orderId") Long orderId);
+
+    @Query(value = """
+            SELECT p
+            FROM ProductOrder p
+            WHERE (:status IS NULL OR p.status IN(:status))
+            """)
+    Page<ProductOrder> findAllProductsOrder(@Param("status") List<StatusProductOrder> status, Pageable pageable);
 }
