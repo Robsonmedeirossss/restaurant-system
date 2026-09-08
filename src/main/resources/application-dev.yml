@@ -18,3 +18,9 @@ spring:
   threads:
     virtual:
       enabled: true
+  cloud:
+    sqs:
+      queue-request: payment-request 
+      queue-response: payment-response
+    s3:
+      bucket-name: restaurant-products-imgs
