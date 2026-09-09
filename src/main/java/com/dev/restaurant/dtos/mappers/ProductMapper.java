@@ -17,12 +17,13 @@ public class ProductMapper {
             .available(product.getAvailable())
             .preparationMinutes(product.getPreparationMinutes())
             .stock(product.getStock())
+            .imageUrl(product.getImageUrl())
             .categoryId(product.getCategoryProduct().getId())
             .createdAt(product.getCreatedAt())
             .build();
   }
 
-  public static Product toEntity(ProductRequest product, CategoryProduct category) {
+  public static Product toEntity(ProductRequest product, CategoryProduct category, String imageUrl) {
     return Product.builder()
             .name(product.name())
             .description(product.description())
@@ -30,6 +31,7 @@ public class ProductMapper {
             .available(product.available() != null ? product.available() : true)
             .preparationMinutes(product.preparationMinutes() != null ? product.preparationMinutes() : 30)
             .stock(product.stock() != null ? product.stock() : 0)
+            .imageUrl(imageUrl)
             .categoryProduct(category)
             .createdAt(LocalDateTime.now())
             .build();

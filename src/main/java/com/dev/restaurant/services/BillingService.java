@@ -15,7 +15,6 @@ import com.dev.restaurant.dtos.responses.BillingResponse;
 import com.dev.restaurant.entities.Billing;
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.repositories.BillingRepository;
-import com.dev.restaurant.repositories.OrderRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +45,7 @@ public class BillingService {
 
         Order order = this.orderService.findEntityById(request.orderId());
 
-        if(this.billingOrderAlreadyExists(order.getId())) {
+        if(this.billingOrderExists(order.getId())) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
             String.format("Já existe uma conta para o pedido de id %s", order.getId()));
@@ -117,8 +116,17 @@ public class BillingService {
              ));
     }
 
-    private boolean billingOrderAlreadyExists(Long id) {
-        return this.billingRepository.findBillingByOrderId(id).isPresent();
+    protected boolean billingOrderExists(Long id) {
+        return this.billingRepository.findByOrderId(id).isPresent();
+    }
+
+    protected Billing findBillingByOrderId(Long id) {
+        return this.billingRepository.findByOrderId(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                String.format("Nenhum conta aberta para o pedido de id %d", id)
+            ));
+    
     }
 
     private BigDecimal getTotal(Billing billing, BigDecimal subtotal) {

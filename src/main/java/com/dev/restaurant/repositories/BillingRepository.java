@@ -9,5 +9,5 @@ import com.dev.restaurant.entities.Billing;
 
 @Repository
 public interface BillingRepository extends JpaRepository<Billing, Long> {
-  Optional<Billing> findBillingByOrderId(Long id);
+  Optional<Billing> findByOrderId(Long orderId);
 }

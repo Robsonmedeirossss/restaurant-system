@@ -3,6 +3,7 @@ package com.dev.restaurant.controllers;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dev.restaurant.dtos.requests.creates.ProductRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductUpdate;
@@ -41,10 +44,13 @@ public class ProductController {
         return this.productService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse create(@Valid @RequestBody ProductRequest request) {
-        return this.productService.create(request);
+    public ProductResponse create(
+        @RequestPart(value = "image", required = false) MultipartFile image,
+        @RequestPart("productData") @Valid ProductRequest request
+    ) {
+        return this.productService.create(request, image);
     }
 
     @PatchMapping("/{id}")

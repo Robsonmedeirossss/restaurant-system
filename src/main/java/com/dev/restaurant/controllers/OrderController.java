@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.restaurant.dtos.requests.creates.OrderRequest;
+import com.dev.restaurant.dtos.requests.creates.PaymentRequest;
 import com.dev.restaurant.dtos.requests.creates.ProductOrderRequest;
 import com.dev.restaurant.dtos.requests.filters.ProductOrderFilter;
 import com.dev.restaurant.dtos.requests.updates.OrderUpdate;
@@ -21,8 +22,10 @@ import com.dev.restaurant.dtos.requests.updates.ProductOrderStatusRequest;
 import com.dev.restaurant.dtos.requests.updates.ProductOrderUpdate;
 import com.dev.restaurant.dtos.responses.OrderResponse;
 import com.dev.restaurant.dtos.responses.PageProductOrderResponse;
+import com.dev.restaurant.dtos.responses.PaymentResponse;
 import com.dev.restaurant.dtos.responses.ProductOrderResponse;
 import com.dev.restaurant.services.OrderService;
+import com.dev.restaurant.services.PaymentService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 
     private final OrderService orderService;
+    private final PaymentService paymentService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -133,6 +137,12 @@ public class OrderController {
         @PathVariable Long productOrderId
     ) {
         this.orderService.deleteProductOrderById(orderId, productOrderId);
+    }
+
+    @PostMapping("/{orderId}/payment")
+    @ResponseStatus(HttpStatus.OK)
+    public PaymentResponse paymentByOrderId(@Valid @RequestBody PaymentRequest request) {
+        return paymentService.process(request);
     }
     
 }

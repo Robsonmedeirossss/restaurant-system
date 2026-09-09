@@ -14,6 +14,7 @@ public record ProductResponse(
   Boolean available,
   Integer preparationMinutes,
   Integer stock,
+  String imageUrl,
   Long categoryId,
   LocalDateTime createdAt
 ) {}

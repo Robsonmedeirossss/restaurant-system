@@ -24,7 +24,6 @@ public class S3Storage {
     public CompletableFuture<String> uploadFile(byte[] filedata, String filename, String contentType) {
         String key = UUID.randomUUID().toString() + "-" + filename;
 
-        try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(this.bucketName)
             .key(key)
@@ -33,12 +32,8 @@ public class S3Storage {
 
 
             return s3Client.putObject(putObjectRequest, AsyncRequestBody.fromBytes(filedata)).thenApply(response -> 
-                String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, Region.US_EAST_1.id(), key)
-            );
+                String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, Region.US_EAST_1.id(), key));
 
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao enviar arquivo para o S3", e);
-        }
     }
 
 }

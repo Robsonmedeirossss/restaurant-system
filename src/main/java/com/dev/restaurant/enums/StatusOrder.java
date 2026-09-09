@@ -11,7 +11,7 @@ public enum StatusOrder {
   }
 
   public boolean cantBeClosed() {
-    return this == PENDING || this == CANCELED;
+    return this == DOING;
   }
 
 }
