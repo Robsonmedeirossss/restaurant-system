@@ -1,5 +1,6 @@
 package com.dev.restaurant.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,7 +32,9 @@ public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long
         coalesce(sum(po.quantity), 0) as "totalProductsSold"
         from orders o
         inner join products_order po on po.order_id = o.id
-        where o.status ='PAID';
+        where o.status ='PAID'
+        and(cast(:from as timestamp) is null or o.created_at >= :from)
+        and(cast(:to as timestamp) is null or o.created_at <= :to);
     """, nativeQuery = true)
-    Long getTotalProductsSold();
+    Long getTotalProductsSold(@Param("from") LocalDate from, @Param("to") LocalDate to);
 }

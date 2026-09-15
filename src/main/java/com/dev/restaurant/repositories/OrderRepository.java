@@ -1,6 +1,7 @@
 package com.dev.restaurant.repositories;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -67,17 +68,21 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         from orders o
         left join products_order po on po.order_id = o.id
         where o.status <> 'CANCELED'
+        and(cast(:from as timestamp) is null or o.created_at >= :from)
+        and(cast(:to as timestamp) is null or o.created_at <= :to)
         group by o.id
         ) as total_orders;
     """, nativeQuery = true)
-    OrderIndicatorsProjection orderIndicadotors();
+    OrderIndicatorsProjection orderIndicadotors(@Param("from") LocalDate from, @Param("to") LocalDate to);
 
     @Query(value = """
         SELECT 
         o.status as status,
         count(o.id) as quantity
         from orders o
+        where (cast(:from as timestamp) is null or o.created_at >= :from)
+        and (cast(:to as timestamp) is null or o.created_at <= :to)
         group by o.status ;       
     """, nativeQuery = true)
-    List<OrdersByStatusProjection> getTotalOrdersByStatus();
+    List<OrdersByStatusProjection> getTotalOrdersByStatus(@Param("from") LocalDate from, @Param("to") LocalDate to);
 }

@@ -1,5 +1,6 @@
 package com.dev.restaurant.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -28,12 +29,12 @@ public class IndicatorService {
     private final ProductOrderRepository productOrderRepository;
     private final ProductRepository productRepository;
 
-    public IndicatorResponse getOrderIndicators() {
-        OrderIndicatorsProjection orderIndicatorsProjection = this.orderRepository.orderIndicadotors();
-        List<OrdersByStatusProjection> ordersByStatusProjection = this.orderRepository.getTotalOrdersByStatus();
-        Long totalProductsSold = this.productOrderRepository.getTotalProductsSold();
+    public IndicatorResponse getOrderIndicators(LocalDate from, LocalDate to) {
+        OrderIndicatorsProjection orderIndicatorsProjection = this.orderRepository.orderIndicadotors(from, to);
+        List<OrdersByStatusProjection> ordersByStatusProjection = this.orderRepository.getTotalOrdersByStatus(from, to);
+        Long totalProductsSold = this.productOrderRepository.getTotalProductsSold(from, to);
         List<PreparationIndicatorsProjection> averagePreparationMinutes = this.productRepository.getAveragPreparationMinutes();
-        List<TopProductsProjection> topProductsProjection = this.productRepository.getTopProducts();
+        List<TopProductsProjection> topProductsProjection = this.productRepository.getTopProducts(from, to);
 
         OrderIndicatorResponse ordersIndicators = OrderIndicatorResponse.builder()
         .totalOrders(orderIndicatorsProjection.getTotalOrders())
