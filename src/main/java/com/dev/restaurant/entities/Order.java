@@ -59,8 +59,8 @@ public class Order {
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
   List<ProductOrder> productOrders;
 
-  public void markOrderAsDone() {
-    this.status = StatusOrder.DONE;
+  public void markOrderAsDelivered() {
+    this.status = StatusOrder.DELIVERED;
   }
 
   public void addProductOrder(ProductOrder productOrder) {

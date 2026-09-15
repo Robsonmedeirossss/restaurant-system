@@ -61,16 +61,16 @@ public class BillingService {
         if(order.getStatus().cantBeClosed()) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Não é possível fechar a conta para um pedido com status PENDING ou CANCELED, pedido deve estar com status DOING"
+                "Não é possível fechar a conta para um pedido com status PENDING ou CANCELED, pedido deve estar com status DELIVERED"
             );
         }
 
         order.getProductOrders().stream()
             .forEach(productOrder -> {
-                if(!productOrder.getStatus().isDone()) {
+                if(!productOrder.getStatus().isDelivered()) {
                     throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
-                        "Todos os itens do pedido devem estar com status DONE"
+                        "Para fechar a conta, todos os itens do pedido devem estar com status DELIVERED"
                     );
                 }
             });
@@ -82,7 +82,7 @@ public class BillingService {
         BigDecimal total = this.getTotal(billing, subtotal);
 
 
-        order.markOrderAsDone();
+        order.markOrderAsDelivered();
 
         billing.setSubtotal(subtotal);
         billing.setTotal(total);

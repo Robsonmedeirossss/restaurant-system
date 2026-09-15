@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import com.dev.restaurant.entities.Order;
 import com.dev.restaurant.entities.ProductOrder;
 import com.dev.restaurant.enums.StatusProductOrder;
+import com.dev.restaurant.projections.OrderIndicatorsProjection;
+import com.dev.restaurant.projections.OrdersByStatusProjection;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -53,4 +55,29 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             WHERE (:status IS NULL OR p.status IN(:status))
             """)
     Page<ProductOrder> findAllProductsOrder(@Param("status") List<StatusProductOrder> status, Pageable pageable);
+
+    @Query(value = """
+        select 
+        count(*) as "totalOrders",
+        coalesce(sum(total_order), 0) as "totalRevenue",
+        coalesce(round(avg(total_order) ,2), 0) as "averageOrderValue"
+        from (
+            select
+        sum(po.quantity * po.unity_price) as total_order
+        from orders o
+        left join products_order po on po.order_id = o.id
+        where o.status <> 'CANCELED'
+        group by o.id
+        ) as total_orders;
+    """, nativeQuery = true)
+    OrderIndicatorsProjection orderIndicadotors();
+
+    @Query(value = """
+        SELECT 
+        o.status as status,
+        count(o.id) as quantity
+        from orders o
+        group by o.status ;       
+    """, nativeQuery = true)
+    List<OrdersByStatusProjection> getTotalOrdersByStatus();
 }

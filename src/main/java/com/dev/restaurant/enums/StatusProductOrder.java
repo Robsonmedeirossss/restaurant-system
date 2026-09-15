@@ -6,6 +6,7 @@ public enum StatusProductOrder {
   PENDING,
   DOING,
   DONE,
+  DELIVERED,
   CANCELED;
 
   private Set<StatusProductOrder> allowedTransictions;
@@ -13,7 +14,8 @@ public enum StatusProductOrder {
   static {
     PENDING.allowedTransictions = Set.of(DOING, CANCELED);
     DOING.allowedTransictions = Set.of(DONE, CANCELED);
-    DONE.allowedTransictions = Set.of();
+    DONE.allowedTransictions = Set.of(DELIVERED);
+    DELIVERED.allowedTransictions = Set.of();
     CANCELED.allowedTransictions = Set.of(); 
   }
 
@@ -27,6 +29,10 @@ public enum StatusProductOrder {
 
   public boolean isDone () {
     return this == DONE;
+  }
+
+  public boolean isDelivered() {
+    return this == DELIVERED;
   }
 
 }

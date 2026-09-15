@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS orders(
       'PENDING',
       'DOING',
       'DONE',
+      'DELIVERED',
+      'PAID',
       'CANCELED'
     )
   ) DEFAULT 'PENDING',

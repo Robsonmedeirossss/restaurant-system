@@ -204,6 +204,13 @@ public class OrderService {
     Order order = this.findEntityById(orderId);    
     ProductOrder productOrder = this.findProductOrderEntityById(productOrderId);
 
+    if(!this.productOrderRepository.checkIfOrderAndProductOrderExist(productOrderId, orderId)) {
+        throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            String.format("ProductOrder de id %d não existe no pedido de id %d", productOrderId, orderId)
+        );
+    }
+
         if(!productOrder.getStatus().canTransiction(statusRequest.status())){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
