@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: service
+  cloud:
+    aws:
+      sqs:
+        request-queue: payment-request
+        response-queue: payment-response
+server:
+  port: 8081
